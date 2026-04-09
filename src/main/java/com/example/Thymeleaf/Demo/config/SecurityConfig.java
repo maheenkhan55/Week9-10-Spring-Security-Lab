@@ -22,7 +22,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/register", "/css/**", "/js/**", "/api/**").permitAll()
-                        .requestMatchers("/create-fighter").hasRole("ADMIN")
+                        .requestMatchers("/create-fighter", "/h2-console/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
