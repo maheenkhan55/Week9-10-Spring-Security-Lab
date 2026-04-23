@@ -2,10 +2,10 @@ package com.example.Thymeleaf.Demo.Service;
 
 import com.example.Thymeleaf.Demo.Model.Fighter;
 import com.example.Thymeleaf.Demo.repository.FighterRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FighterService {
@@ -16,31 +16,27 @@ public class FighterService {
         this.fighterRepository = fighterRepository;
     }
 
-    public Page<Fighter> getFighters(Pageable pageable, String search, String filterType) {
-        if (filterType == null) filterType = "all";
-
-        switch (filterType.toLowerCase()) {
-            case "name":
-                return fighterRepository.findByNameContainingIgnoreCase(search != null ? search : "", pageable);
-            case "health":
-                int health = 0;
-                try {
-                    health = search != null ? Integer.parseInt(search) : 0;
-                } catch (NumberFormatException e) {
-                    health = 0;
-                }
-                return fighterRepository.findByHealthGreaterThan(health, pageable);
-            case "strongest":
-                return fighterRepository.findStrongestFighters(pageable);
-            case "balanced":
-                return fighterRepository.findBalancedFighters(1200, 150, pageable); 
-            default:
-                return fighterRepository.findAll(pageable);
-        }
+    public Fighter saveFighter(Fighter fighter) {
+        return fighterRepository.save(fighter);
     }
 
-    public void addFighter(Fighter fighter) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addFighter'");
+    public List<Fighter> getAllFighters() {
+        return fighterRepository.findAll();
+    }
+
+    public Optional<Fighter> getFighterById(Integer id) {
+        return fighterRepository.findById(id);
+    }
+
+    public void deleteFighter(Integer id) {
+        fighterRepository.deleteById(id);
+    }
+
+    public long countFighters() {
+        return fighterRepository.count();
+    }
+
+    public boolean existsById(Integer id) {
+        return fighterRepository.existsById(id);
     }
 }
